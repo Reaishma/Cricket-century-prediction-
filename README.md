@@ -1,28 +1,61 @@
-# Cricket-century-prediction-
-A machine learning model that can predict whether a will score century based on their performance metrics 
-This project demonstrates the application of machine learning in cricket analytics providing insights into century scoring potential 
-Features:
 
-1. Data Collection: Gathered data on cricketers' performance metrics, such as runs scored, strike rate, balls faced, fours, sixes, and centuries.
-2. Feature Engineering: Created new features like Run Rate, Boundary Percentage, Dot Ball Percentage, Run Rate vs Strike Rate Ratio, Boundary to Dot Ball Ratio, and Runs per Ball Faced.
-3. Model Selection: Used a Random Forest Classifier to predict centuries.
 
-Skills:
+Cricket Century Prediction 🏏📊
 
-1. Machine Learning: Applied machine learning concepts to build a predictive model.
-2. Data Analysis: Worked with datasets to extract meaningful insights.
-3. Feature Engineering: Created new features to improve model performance.
+Overview
+A machine learning project that predicts cricket centuries 🎯
 
-Tools and Technologies:
+Features
+- 📈 *Accurate predictions*: Using advanced algorithms and data analysis 🤖
+- 🤖 *Machine learning model*: Trained on historical cricket data 📚
+- 📊 *Data visualization*: Insights into team and player performance 📊
 
-1. Machine Learning Algorithms: Used Random Forest Classifier.
-2. Data Preprocessing: Utilized techniques like feature scaling and encoding.
-3. Model Evaluation: Used metrics like accuracy score and classification report.
+Technologies Used
+- 🐍 *Python*: Core programming language 💻
+- 🤖 *Scikit-learn*: Machine learning library 🤓
+- 📊 *Pandas*: Data manipulation and analysis 📈
 
-Outcomes:
+Getting Started
+1. Install required libraries: `pip install -r requirements.txt`
+2. Run the model: `python predict.py`
 
-1. Predictive Insights: The model provides predictions on century scoring potential.
-2. Performance Evaluation: The model's performance was evaluated using metrics like accuracy score and classification report.
-3. Model Improvement: Identified areas for improvement, such as tuning hyperparameters and experimenting with different algorithms
-output link:
-[![Cricket Century Prediction](https://drive.google.com/uc?id=1R2GfJowvzQ1pcx4DYnOewfAwy_9KjwZS)](https://drive.google.com/file/d/1R2GfJowvzQ1pcx4DYnOewfAwy_9KjwZS/view)
+User Guide
+1. *Input data*: Provide the required input data (e.g., player statistics, team performance) 📝
+2. *Run the model*: Execute the `predict.py` script to generate predictions 🚀
+3. *Interpret results*: Analyze the output to understand the predicted likelihood of a century 📊
+
+Repository Contents
+- `predict.py`: The main prediction script 📄
+- `model.py`: The machine learning model 🤖
+- `data.py`: Data loading and preprocessing 📊
+- `requirements.txt`: List of required libraries 📚
+
+Example Output
+[!https://drive.google.com/uc?id=1R2GfJowvzQ1pcx4DYnOewfAwy_9KjwZS](https://drive.google.com/file/d/1R2GfJowvzQ1pcx4DYnOewfAwy_9KjwZS/view) 🎥
+
+Example Use Cases
+- Predicting centuries in international cricket matches 🏏
+- Analyzing team performance and strategy 📈
+- Identifying key player statistics that influence century predictions 🔍
+
+Requirements
+- Python 3.x 🐍
+- Scikit-learn 🤖
+- Pandas 📊
+- NumPy 🔢
+
+Performance Metrics
+- Accuracy 🎯
+- Precision 🔍
+- Recall 📝
+- F1-score 📊
+
+for Contributing
+Contributions welcome! 🌟
+
+Author
+- *Reaishma N* 🙋‍♀️
+
+License
+MIT License 📄
+
