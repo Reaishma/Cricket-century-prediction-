@@ -11,7 +11,7 @@ Features
 - 📊 *Data visualization*: Insights into team and player performance 📊
 
 Technologies Used
-- 🐍 *Python*: Core programming language 💻
+-  *Python*: Core programming language 💻
 - 🤖 *Scikit-learn*: Machine learning library 🤓
 - 📊 *Pandas*: Data manipulation and analysis 📈
 
