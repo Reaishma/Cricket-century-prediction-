@@ -51,7 +51,7 @@ Performance Metrics
 - F1-score 📊
 
 for Contributing
-Contributions welcome! 🌟
+Contributions welcome! 🌟 fork the respository and submit pull by request 
 
 Author
 - *Reaishma N* 🙋‍♀️
