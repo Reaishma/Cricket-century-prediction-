@@ -161,8 +161,13 @@ The prediction logic is in the `makePrediction()` function in `script.js`. You c
 
 ## 🤝 Contributions 
 
-
-
+Development Process
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new functionality
+5. Ensure all tests pass
+6. Submit a pull request
 
 
 ## Example Output
@@ -173,14 +178,6 @@ The prediction logic is in the `makePrediction()` function in `script.js`. You c
 - Analyzing team performance and strategy 📈
 - Identifying key player statistics that influence century predictions 🔍
 
-### Performance Metrics
-- Accuracy 🎯
-- Precision 🔍
-- Recall 📝
-- F1-score 📊
-
-for Contributing
-Contributions welcome! 🌟 fork the respository and submit pull  request 
 
 ## Author
   *Reaishma N* 🙋‍♀️ [GitHub](https://github.com/Reaishma)
