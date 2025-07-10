@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cricket Century Prediction Platform</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏏</text></svg>">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>🏏 Cricket Century Prediction Platform</h1>
+                <p class="subtitle">Advanced ML-powered analysis for predicting cricket centuries</p>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="navigation">
+            <div class="nav-container">
+                <button class="nav-btn active" onclick="showPage('dashboard')">Dashboard</button>
+                <button class="nav-btn" onclick="showPage('predictions')">Real-time Predictions</button>
+                <button class="nav-btn" onclick="showPage('player-analysis')">Player Analysis</button>
+                <button class="nav-btn" onclick="showPage('model-comparison')">Model Comparison</button>
+                <button class="nav-btn" onclick="showPage('data-explorer')">Data Explorer</button>
+            </div>
+        </nav>
+
+        <!-- Dashboard Page -->
+        <div id="dashboard" class="page active">
+            <h2>📊 Dashboard</h2>
+            
+            <!-- Key Metrics -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">2,847</div>
+                    <div class="metric-label">Active Players</div>
+                    <div class="metric-change positive">↑ 12%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">87.3%</div>
+                    <div class="metric-label">Model Accuracy</div>
+                    <div class="metric-change positive">↑ 2.1%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">156</div>
+                    <div class="metric-label">Predictions Today</div>
+                    <div class="metric-change positive">↑ 23%</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">45.2K</div>
+                    <div class="metric-label">Data Points</div>
+                    <div class="metric-change positive">↑ 5.8%</div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>Model Performance Over Time</h3>
+                    <div id="performance-chart"></div>
+                </div>
+                <div class="chart-card">
+                    <h3>Century Predictions by Format</h3>
+                    <div id="format-chart"></div>
+                </div>
+            </div>
+
+            <!-- Recent Predictions -->
+            <div class="table-card">
+                <h3>Recent Predictions</h3>
+                <div class="table-container">
+                    <table id="recent-predictions-table">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Match</th>
+                                <th>Prediction</th>
+                                <th>Confidence</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Virat Kohli</td>
+                                <td>IND vs AUS</td>
+                                <td><span class="prediction-high">78%</span></td>
+                                <td><span class="confidence-high">High</span></td>
+                                <td><span class="status-ongoing">Ongoing</span></td>
+                            </tr>
+                            <tr>
+                                <td>Steve Smith</td>
+                                <td>AUS vs ENG</td>
+                                <td><span class="prediction-high">82%</span></td>
+                                <td><span class="confidence-high">High</span></td>
+                                <td><span class="status-completed">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>Kane Williamson</td>
+                                <td>NZ vs WI</td>
+                                <td><span class="prediction-medium">71%</span></td>
+                                <td><span class="confidence-high">High</span></td>
+                                <td><span class="status-upcoming">Upcoming</span></td>
+                            </tr>
+                            <tr>
+                                <td>Joe Root</td>
+                                <td>ENG vs IND</td>
+                                <td><span class="prediction-medium">69%</span></td>
+                                <td><span class="confidence-medium">Medium</span></td>
+                                <td><span class="status-completed">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>David Warner</td>
+                                <td>AUS vs SA</td>
+                                <td><span class="prediction-medium">74%</span></td>
+                                <td><span class="confidence-high">High</span></td>
+                                <td><span class="status-upcoming">Upcoming</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-time Predictions Page -->
+        <div id="predictions" class="page">
+            <h2>🎯 Real-time Predictions</h2>
+            
+            <!-- Input Form -->
+            <div class="prediction-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="player-name">Player Name</label>
+                        <input type="text" id="player-name" value="Steve Smith" placeholder="Enter player name">
+                    </div>
+                    <div class="form-group">
+                        <label for="match-format">Match Format</label>
+                        <select id="match-format">
+                            <option value="Test">Test</option>
+                            <option value="ODI" selected>ODI</option>
+                            <option value="T20">T20</option>
+                            <option value="T10">T10</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="opposition">Opposition Team</label>
+                        <input type="text" id="opposition" value="England" placeholder="Opposition team">
+                    </div>
+                    <div class="form-group">
+                        <label for="venue">Venue</label>
+                        <input type="text" id="venue" value="Sydney Cricket Ground" placeholder="Match venue">
+                    </div>
+                </div>
+
+                <!-- Match Conditions -->
+                <h3>Match Conditions</h3>
+                <div class="conditions-grid">
+                    <div class="form-group">
+                        <label for="weather">Weather</label>
+                        <select id="weather">
+                            <option value="Clear" selected>Clear</option>
+                            <option value="Overcast">Overcast</option>
+                            <option value="Light Rain">Light Rain</option>
+                            <option value="Heavy Rain">Heavy Rain</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="pitch-type">Pitch Type</label>
+                        <select id="pitch-type">
+                            <option value="Flat" selected>Flat</option>
+                            <option value="Green">Green</option>
+                            <option value="Dusty">Dusty</option>
+                            <option value="Cracked">Cracked</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="temperature">Temperature (°C)</label>
+                        <input type="number" id="temperature" value="25" min="5" max="45">
+                    </div>
+                </div>
+
+                <button class="predict-btn" onclick="makePrediction()">Generate Prediction</button>
+            </div>
+
+            <!-- Prediction Results -->
+            <div id="prediction-results" class="prediction-results" style="display: none;">
+                <div class="result-card">
+                    <h3>Prediction Results</h3>
+                    <div class="prediction-display">
+                        <div class="prediction-value" id="prediction-value">85%</div>
+                        <div class="prediction-label">Century Probability</div>
+                    </div>
+                    <div class="confidence-meter">
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" id="confidence-fill"></div>
+                        </div>
+                        <div class="confidence-label" id="confidence-label">High Confidence</div>
+                    </div>
+                </div>
+
+                <div class="factors-card">
+                    <h3>Key Factors</h3>
+                    <div class="factors-list" id="factors-list">
+                        <!-- Factors will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Player Analysis Page -->
+        <div id="player-analysis" class="page">
+            <h2>👤 Player Analysis</h2>
+            
+            <div class="player-search">
+                <input type="text" id="player-search" placeholder="Search for a player..." onkeyup="searchPlayers()">
+                <div id="player-suggestions" class="player-suggestions"></div>
+            </div>
+
+            <div class="player-profile" id="player-profile">
+                <!-- Player profile will be populated by JavaScript -->
+            </div>
+
+            <div class="analysis-charts">
+                <div class="chart-card">
+                    <h3>Form Trend (Last 10 Matches)</h3>
+                    <div id="form-chart"></div>
+                </div>
+                <div class="chart-card">
+                    <h3>Performance by Venue</h3>
+                    <div id="venue-chart"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Model Comparison Page -->
+        <div id="model-comparison" class="page">
+            <h2>🤖 Model Comparison</h2>
+            
+            <div class="model-metrics">
+                <div class="model-card">
+                    <h3>TensorFlow Model</h3>
+                    <div class="model-stats">
+                        <div class="stat">
+                            <span class="stat-label">Accuracy</span>
+                            <span class="stat-value">85.7%</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Precision</span>
+                            <span class="stat-value">82.3%</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Recall</span>
+                            <span class="stat-value">87.1%</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">F1 Score</span>
+                            <span class="stat-value">84.6%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="model-card">
+                    <h3>PyTorch Model</h3>
+                    <div class="model-stats">
+                        <div class="stat">
+                            <span class="stat-label">Accuracy</span>
+                            <span class="stat-value">83.4%</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Precision</span>
+                            <span class="stat-value">80.1%</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Recall</span>
+                            <span class="stat-value">85.9%</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">F1 Score</span>
+                            <span class="stat-value">82.9%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="model-card">
+                    <h3>Ensemble Model</h3>
+                    <div class="model-stats">
+                        <div class="stat">
+                            <span class="stat-label">Accuracy</span>
+                            <span class="stat-value">88.2%</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Precision</span>
+                            <span class="stat-value">86.7%</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Recall</span>
+                            <span class="stat-value">89.3%</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">F1 Score</span>
+                            <span class="stat-value">88.0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comparison-chart-card">
+                <h3>Model Performance Comparison</h3>
+                <div id="model-comparison-chart"></div>
+            </div>
+        </div>
+
+<!-- Data Explorer Page -->
+        <div id="data-explorer" class="page">
+            <h2>📈 Data Explorer</h2>
+            
+            <div class="explorer-controls">
+                <div class="filter-group">
+                    <label for="format-filter">Format:</label>
+                    <select id="format-filter">
+                        <option value="all">All Formats</option>
+                        <option value="Test">Test</option>
+                        <option value="ODI">ODI</option>
+                        <option value="T20">T20</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="country-filter">Country:</label>
+                    <select id="country-filter">
+                        <option value="all">All Countries</option>
+                        <option value="Australia">Australia</option>
+                        <option value="India">India</option>
+                        <option value="England">England</option>
+                        <option value="Pakistan">Pakistan</option>
+                        <option value="New Zealand">New Zealand</option>
+                    </select>
+                </div>
+                <button class="filter-btn" onclick="applyFilters()">Apply Filters</button>
+            </div>
+
+            <div class="explorer-charts">
+                <div class="chart-card">
+                    <h3>Century Distribution by Country</h3>
+                    <div id="country-distribution-chart"></div>
+                </div>
+                <div class="chart-card">
+                    <h3>Average Scores by Format</h3>
+                    <div id="format-scores-chart"></div>
+                </div>
+            </div>
+
+            <div class="data-table-card">
+                <h3>Player Statistics</h3>
+                <div class="table-container">
+                    <table id="player-stats-table">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Country</th>
+                                <th>Matches</th>
+                                <th>Runs</th>
+                                <th>Average</th>
+                                <th>Centuries</th>
+                                <th>Strike Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stats-table-body">
+                            <!-- Data will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
