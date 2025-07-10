@@ -183,7 +183,7 @@ for Contributing
 Contributions welcome! 🌟 fork the respository and submit pull  request 
 
 ## Author
-  *Reaishma N* 🙋‍♀️ [GitHub](. )
+  *Reaishma N* 🙋‍♀️ [GitHub](https://github.com/Reaishma)
 
 ## License
   MIT License 📄
