@@ -25,6 +25,73 @@ This is a comprehensive cricket century prediction platform built with Streamlit
 - **Processing**: Automated data cleaning, feature engineering, scaling
 - **Storage**: In-memory processing with model persistence via joblib
 
+## Features Overview
+
+### 🏏 Dashboard
+- Live metrics showing active players, model accuracy, and predictions
+- Performance charts tracking model accuracy over time
+- Format-wise century distribution analysis
+- Recent predictions table with confidence levels
+
+### 🎯 Real-time Predictions
+- Interactive form to input player details and match conditions
+- ML-powered prediction algorithm considering:
+  - Player statistics (average, centuries, strike rate)
+  - Match format (Test, ODI, T20, T10)
+  - Weather conditions
+  - Pitch type
+  - Temperature
+- Visual confidence meter and key factors analysis
+
+### 👤 Player Analysis
+- Search functionality for all players
+- Detailed player profiles with comprehensive statistics
+- Form trend analysis (last 10 matches)
+- Venue-specific performance charts
+
+### 🤖 Model Comparison
+- Performance metrics for TensorFlow, PyTorch, and Ensemble models
+- Interactive comparison charts
+- Accuracy, Precision, Recall, and F1 Score visualization
+
+### 📈 Data Explorer
+- Filterable player statistics table
+- Country-wise century distribution
+- Format-wise average scores
+- Dynamic chart updates based on filters
+
+
+##🚀 Live demo
+   
+  [view live demo](
+
+## Customization
+
+### Adding New Players
+Edit the `playersData` array in `script.js`:
+
+```javascript
+{
+    id: "player_id",
+    name: "Player Name",
+    country: "Country",
+    role: "Batsman/Bowler/All-rounder",
+    matches: 100,
+    runs: 5000,
+    average: 50.0,
+    centuries: 15,
+    strikeRate: 85.5
+}
+```
+
+### Modifying Prediction Algorithm
+The prediction logic is in the `makePrediction()` function in `script.js`. You can adjust:
+- Base prediction weights
+- Format factors
+- Weather impact
+- Pitch condition effects
+- Temperature influences
+
 ## Key Components
 
 ### Machine Learning Models
@@ -92,6 +159,7 @@ This is a comprehensive cricket century prediction platform built with Streamlit
 - **Modular Design**: Clear separation of concerns across components
 - **Configuration Flexibility**: Easy adjustment of model parameters and thresholds
 
+## 🤝 Contributions 
 
 
 
@@ -115,7 +183,7 @@ for Contributing
 Contributions welcome! 🌟 fork the respository and submit pull  request 
 
 ## Author
-  *Reaishma N* 🙋‍♀️
+  *Reaishma N* 🙋‍♀️ [GitHub](. )
 
 ## License
   MIT License 📄
