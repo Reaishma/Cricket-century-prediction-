@@ -61,7 +61,7 @@ This is a comprehensive cricket century prediction platform built with Streamlit
 - Dynamic chart updates based on filters
 
 
-##🚀 Live demo
+## 🚀 Live demo
    
   [view live demo](https://reaishma.github.io/Cricket-century-prediction-/)
 
