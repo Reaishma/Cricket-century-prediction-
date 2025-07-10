@@ -183,5 +183,5 @@ Development Process
   *Reaishma N* 🙋‍♀️ [GitHub](https://github.com/Reaishma)
 
 ## License
-  MIT License 📄
+  This project is licensed under MIT Licence see the [licence](https://github.com/Reaishma/Cricket-century-prediction-/blob/main/LICENSE) file for details 
 
