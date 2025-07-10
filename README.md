@@ -2,11 +2,11 @@
 
 # Cricket Century Prediction 🏏📊
 
-## Overview
+## 🚀Overview
 
 This is a comprehensive cricket century prediction platform built with Streamlit that uses machine learning to predict when cricket players are likely to score centuries. The system combines multiple model architectures including TensorFlow, PyTorch, scikit -learn and ensemble methods to provide accurate predictions based on historical player data and match conditions.
 
-## System Architecture
+## 🛠️System Architecture
 
 ### Frontend Architecture
 - **Framework**: Streamlit web application
@@ -25,7 +25,7 @@ This is a comprehensive cricket century prediction platform built with Streamlit
 - **Processing**: Automated data cleaning, feature engineering, scaling
 - **Storage**: In-memory processing with model persistence via joblib
 
-## Features Overview
+## ✅Features Overview
 
 ### 🏏 Dashboard
 - Live metrics showing active players, model accuracy, and predictions
@@ -63,9 +63,9 @@ This is a comprehensive cricket century prediction platform built with Streamlit
 
 ##🚀 Live demo
    
-  [view live demo](
+  [view live demo](https://reaishma.github.io/Cricket-century-prediction-/)
 
-## Customization
+## 📝Customization
 
 ### Adding New Players
 Edit the `playersData` array in `script.js`:
@@ -92,7 +92,7 @@ The prediction logic is in the `makePrediction()` function in `script.js`. You c
 - Pitch condition effects
 - Temperature influences
 
-## Key Components
+## ✅Key Components
 
 ### Machine Learning Models
 1. **TensorFlow Model**: Deep neural network with batch normalization and dropout
@@ -170,7 +170,7 @@ Development Process
 6. Submit a pull request
 
 
-## Example Output
+## 📍Example Output
 [!https://drive.google.com/uc?id=1R2GfJowvzQ1pcx4DYnOewfAwy_9KjwZS](https://drive.google.com/file/d/1R2GfJowvzQ1pcx4DYnOewfAwy_9KjwZS/view) 🎥
 
 ## Example Use Cases
@@ -182,6 +182,6 @@ Development Process
 ## Author
   *Reaishma N* 🙋‍♀️ [GitHub](https://github.com/Reaishma)
 
-## License
+## 📄License
   This project is licensed under MIT Licence see the [licence](https://github.com/Reaishma/Cricket-century-prediction-/blob/main/LICENSE) file for details 
 
