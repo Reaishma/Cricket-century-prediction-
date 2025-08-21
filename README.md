@@ -2,6 +2,10 @@
 
 # Cricket Century Prediction 🏏📊
 
+# 🚀 Live demo
+   
+  view live demo https://reaishma.github.io/Cricket-century-prediction-/
+
 ## 🚀Overview
 
 This is a comprehensive cricket century prediction platform built with Streamlit that uses machine learning to predict when cricket players are likely to score centuries. The system combines multiple model architectures including TensorFlow, PyTorch, scikit -learn and ensemble methods to provide accurate predictions based on historical player data and match conditions.
@@ -61,9 +65,6 @@ This is a comprehensive cricket century prediction platform built with Streamlit
 - Dynamic chart updates based on filters
 
 
-## 🚀 Live demo
-   
-  [view live demo](https://reaishma.github.io/Cricket-century-prediction-/)
 
 ## 📝Customization
 
