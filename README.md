@@ -115,6 +115,9 @@ The prediction logic is in the `makePrediction()` function in `script.js`. You c
 - **Feature Engineer**: Creates rolling statistics, form features, and player metrics
 
 ### Visualization & Analysis
+
+![data explore](https://github.com/Reaishma/Cricket-century-prediction-/blob/main/Screenshot_20250904-144455_1.jpg)
+
 - **Visualizer**: Plotly-based interactive charts and graphs
 - **Model Utils**: Comprehensive model evaluation and comparison tools
 - **Real-time Dashboards**: Live prediction interfaces
