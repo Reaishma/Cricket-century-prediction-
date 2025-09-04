@@ -59,6 +59,9 @@ This is a comprehensive cricket century prediction platform built with Streamlit
 - Venue-specific performance charts
 
 ### 🤖 Model Comparison
+
+![model comparison](https://github.com/Reaishma/Cricket-century-prediction-/blob/main/Screenshot_20250904-144419_1.jpg)
+
 - Performance metrics for TensorFlow, PyTorch, and Ensemble models
 - Interactive comparison charts
 - Accuracy, Precision, Recall, and F1 Score visualization
