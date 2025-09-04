@@ -40,6 +40,9 @@ This is a comprehensive cricket century prediction platform built with Streamlit
 - Recent predictions table with confidence levels
 
 ### 🎯 Real-time Predictions
+
+![Real time player](https://github.com/Reaishma/Cricket-century-prediction-/blob/main/Screenshot_20250904-144403_1.jpg)
+
 - Interactive form to input player details and match conditions
 - ML-powered prediction algorithm considering:
   - Player statistics (average, centuries, strike rate)
