@@ -12,6 +12,8 @@ This is a comprehensive cricket century prediction platform built with Streamlit
 
 ![overview](https://github.com/Reaishma/Cricket-century-prediction-/blob/main/Screenshot_20250904-144333_1.jpg)
 
+ 
+
 ## 🛠️System Architecture
 
 ### Frontend Architecture
@@ -184,9 +186,6 @@ Development Process
 5. Ensure all tests pass
 6. Submit a pull request
 
-
-## 📍Example Output
-[!https://drive.google.com/uc?id=1R2GfJowvzQ1pcx4DYnOewfAwy_9KjwZS](https://drive.google.com/file/d/1R2GfJowvzQ1pcx4DYnOewfAwy_9KjwZS/view) 🎥
 
 ## Example Use Cases
 - Predicting centuries in international cricket matches 🏏
