@@ -1,8 +1,10 @@
-streamlit 
-numpy 
-pandas 
-plotly 
-scikit-learn 
+streamlit
+pandas
+numpy
+plotly
+tensorflow
 torch
-pytorch
-tensorflow 
+scikit-learn
+xgboost
+
+
