@@ -2,9 +2,9 @@
 
 # Cricket Century Prediction 🏏📊
 
-# 🚀 Live demo
+# 🚀 Live 
    
-  view live demo https://reaishma.github.io/Cricket-century-prediction-/
+  **View on streamlit**- https://d3vqfhjdzsfx2ertcgdju3.streamlit.app/
 
 ## 🚀Overview
 
