@@ -6,5 +6,6 @@ tensorflow
 torch
 scikit-learn
 xgboost
+seaborn
 
 
