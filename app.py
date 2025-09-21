@@ -6,55 +6,6 @@ import plotly.express as px
 from datetime import datetime, timedelta
 import time
 import os
-# pytorch_model.py
-
-try:
-    # Try to import PyTorch
-    import torch
-    import torch.nn as nn
-    import torch.optim as optim
-    from torch.utils.data import DataLoader, TensorDataset
-    
-    # Define a flag to indicate successful import
-    TORCH_AVAILABLE = True
-
-except ImportError:
-    # PyTorch is not installed. Handle this gracefully.
-    TORCH_AVAILABLE = False
-    
-    # You can also define placeholder classes or functions here
-    # to prevent further NameErrors.
-    class PyTorchModel:
-        def __init__(self, *args, **kwargs):
-            raise RuntimeError("PyTorch is not installed. Please install it with 'pip install torch'.")
-        # Add other method definitions (e.g., predict, train)
-        # that will also raise an error if called.
-        def predict(self, data):
-            raise RuntimeError("PyTorch is not installed.")
-
-# Now, based on the flag, define the actual model if it's available.
-if TORCH_AVAILABLE:
-    
-    # This is where your actual PyTorch model class definition goes
-    class PyTorchModel:
-        def __init__(self, input_dim, hidden_dim, output_dim, learning_rate):
-            super().__init__()
-            # Your model architecture here
-            self.model = nn.Sequential(
-                nn.Linear(input_dim, hidden_dim),
-                nn.ReLU(),
-                nn.Linear(hidden_dim, output_dim),
-                nn.Sigmoid() # Or whatever activation is appropriate
-            )
-            # ... other initialization logic
-        
-        def train(self, X_train, y_train):
-            # Training logic here
-            pass
-
-        def predict(self, X_test):
-            # Prediction logic here
-            pass
 
 # Import custom modules
 from models.tensorflow_model import TensorFlowModel
