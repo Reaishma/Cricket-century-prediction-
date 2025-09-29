@@ -2,6 +2,8 @@
 
 # Cricket Century Prediction 🏏📊
 
+<div align="center">
+
 # 🚀 Access the project 
    
   **View on streamlit - https://d3vqfhjdzsfx2ertcgdju3.streamlit.app/**
