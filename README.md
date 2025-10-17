@@ -126,7 +126,7 @@ The prediction logic is in the `makePrediction()` function in `script.js`. You c
 
 ### Visualization & Analysis
 
-![data explore](https://github.com/Reaishma/Cricket-century-prediction-/blob/main/Screenshot_20250904-144455_1.jpg)
+![model](https://github.com/Reaishma/Cricket-century-prediction-/blob/main/chrome_screenshot_Oct%2016%2C%202025%2010_28_08%20AM%20GMT%2B05_30.png)
 
 - **Visualizer**: Plotly-based interactive charts and graphs
 - **Model Utils**: Comprehensive model evaluation and comparison tools
