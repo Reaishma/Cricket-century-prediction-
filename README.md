@@ -68,7 +68,7 @@ This is a comprehensive cricket century prediction platform built with Streamlit
 
 ### 🤖 Model Comparison
 
-![model comparison](https://github.com/Reaishma/Cricket-century-prediction-/blob/main/Screenshot_20250904-144419_1.jpg)
+![model comparison](https://github.com/Reaishma/Cricket-century-prediction-/blob/main/chrome_screenshot_Oct%2016%2C%202025%2010_28_37%20AM%20GMT%2B05_30.png)
 
 - Performance metrics for TensorFlow, PyTorch, and Ensemble models
 - Interactive comparison charts
