@@ -75,6 +75,8 @@ This is a comprehensive cricket century prediction platform built with Streamlit
 - Accuracy, Precision, Recall, and F1 Score visualization
 
 ### 📈 Data Explorer
+(![Data explorer](https://github.com/Reaishma/Cricket-century-prediction-/blob/main/chrome_screenshot_Oct%2016%2C%202025%2010_29_30%20AM%20GMT%2B05_30.png)
+
 - Filterable player statistics table
 - Country-wise century distribution
 - Format-wise average scores
