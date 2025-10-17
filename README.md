@@ -59,7 +59,7 @@ This is a comprehensive cricket century prediction platform built with Streamlit
 
 ### 👤 Player Analysis
 
-![player analysis](https://github.com/Reaishma/Cricket-century-prediction-/blob/main/Screenshot_20250904-144621_1.jpg)
+![player analysis](https://github.com/Reaishma/Cricket-century-prediction-/blob/main/chrome_screenshot_Oct%2016%2C%202025%207_20_28%20AM%20GMT%2B05_30.png)
 
 - Search functionality for all players
 - Detailed player profiles with comprehensive statistics
