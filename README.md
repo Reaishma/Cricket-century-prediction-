@@ -46,7 +46,7 @@ This is a comprehensive cricket century prediction platform built with Streamlit
 
 ### 🎯 Real-time Predictions
 
-![Real time player](https://github.com/Reaishma/Cricket-century-prediction-/blob/main/Screenshot_20250904-144403_1.jpg)
+![Real time player](https://github.com/Reaishma/Cricket-century-prediction-/blob/main/chrome_screenshot_Oct%2016%2C%202025%207_18_59%20AM%20GMT%2B05_30.png)
 
 - Interactive form to input player details and match conditions
 - ML-powered prediction algorithm considering:
