@@ -1,0 +1,2150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cricket Century Prediction Platform</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏏</text></svg>">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+        }
+
+        /* Header */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 4rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .main-header.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .main-header.scrolled .logo {
+            color: #ff6b35;
+        }
+
+        .hamburger {
+            width: 40px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            width: 100%;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .main-header.scrolled .hamburger span {
+            background: #ff6b35;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(10px, 10px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(8px, -8px);
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 999;
+            padding: 6rem 3rem;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -10px 0 50px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar.active {
+            right: 0;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar.active .sidebar-nav li {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .sidebar.active .sidebar-nav li:nth-child(1) { transition-delay: 0.1s; }
+        .sidebar.active .sidebar-nav li:nth-child(2) { transition-delay: 0.15s; }
+        .sidebar.active .sidebar-nav li:nth-child(3) { transition-delay: 0.2s; }
+        .sidebar.active .sidebar-nav li:nth-child(4) { transition-delay: 0.25s; }
+        .sidebar.active .sidebar-nav li:nth-child(5) { transition-delay: 0.3s; }
+
+        .sidebar-nav button {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: #333;
+            cursor: pointer;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.3s ease;
+        }
+
+        .sidebar-nav button::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff6b35, #f7931e);
+            transition: width 0.3s ease;
+        }
+
+        .sidebar-nav button:hover::after,
+        .sidebar-nav button.active::after {
+            width: 100%;
+        }
+
+        .sidebar-nav button:hover,
+        .sidebar-nav button.active {
+            color: #ff6b35;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 8rem 2rem 4rem;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            z-index: -1;
+        }
+
+        .parallax-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        /* 3D Spherical Ball Animation */
+        .cricket-ball {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff8c42 0%, #ff5722 50%, #d84315 100%);
+            box-shadow: 
+                inset -25px -25px 40px rgba(0, 0, 0, 0.3),
+                inset 10px 10px 20px rgba(255, 255, 255, 0.2),
+                0 15px 40px rgba(255, 87, 34, 0.4);
+            position: relative;
+        }
+
+        .cricket-ball::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 20%;
+            width: 40%;
+            height: 40%;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), transparent);
+            border-radius: 50%;
+            filter: blur(8px);
+        }
+
+        .cricket-ball::after {
+            content: '';
+            position: absolute;
+            bottom: 10%;
+            right: 10%;
+            width: 30%;
+            height: 30%;
+            background: radial-gradient(circle, rgba(0, 0, 0, 0.2), transparent);
+            border-radius: 50%;
+            filter: blur(6px);
+        }
+
+        .cricket-ball1 {
+            top: 10%;
+            left: 15%;
+            width: 180px;
+            height: 180px;
+            animation: floatBall 25s ease-in-out infinite;
+        }
+
+        .cricket-ball2 {
+            top: 55%;
+            right: 10%;
+            width: 140px;
+            height: 140px;
+            animation: floatBall 30s ease-in-out infinite reverse;
+        }
+
+        .cricket-ball3 {
+            top: 65%;
+            left: 12%;
+            width: 120px;
+            height: 120px;
+            animation: floatBall 20s ease-in-out infinite;
+        }
+
+        @keyframes floatBall {
+            0%, 100% { 
+                transform: translate(0, 0) rotate(0deg); 
+                opacity: 0.8;
+            }
+            25% { 
+                transform: translate(100px, -80px) rotate(90deg); 
+                opacity: 1;
+            }
+            50% { 
+                transform: translate(50px, -150px) rotate(180deg); 
+                opacity: 0.9;
+            }
+            75% { 
+                transform: translate(-50px, -80px) rotate(270deg); 
+                opacity: 1;
+            }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 2vw, 1.8rem);
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-nav {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+
+        .hero-nav-item {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .hero-nav-item:hover,
+        .hero-nav-item.active {
+            color: white;
+            border-bottom-color: white;
+        }
+
+        .discover-btn {
+            background: linear-gradient(135deg, #ffd700 0%, #ffb300 100%);
+            color: white;
+            border: none;
+            padding: 1.2rem 3rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 193, 7, 0.4);
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .discover-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 193, 7, 0.6);
+        }
+
+        /* Content Container */
+        .content-wrapper {
+            background: white;
+            position: relative;
+            z-index: 1;
+            border-radius: 40px 40px 0 0;
+            margin-top: -40px;
+            padding: 4rem 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Page Sections */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .page h2 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .metric-value {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-change {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .metric-change.positive {
+            color: #4ade80;
+        }
+
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .chart-card h3 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Table Styles */
+        .table-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 3rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .prediction-high {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .prediction-medium {
+            color: #f59e0b;
+            font-weight: 600;
+        }
+
+        .confidence-high, .status-ongoing {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .confidence-medium {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-completed {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-upcoming {
+            background: #fce7f3;
+            color: #9f1239;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Form Styles */
+        .prediction-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 3rem;
+        }
+
+        .form-grid, .conditions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #ff6b35;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        .prediction-form h3 {
+            font-size: 1.5rem;
+            color: #333;
+            margin: 2rem 0 1rem;
+        }
+
+        .predict-btn {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .predict-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        /* Prediction Results */
+        .prediction-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .result-card, .factors-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .result-card h3, .factors-card h3 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        .prediction-display {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .prediction-value {
+            font-size: 4rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .prediction-label {
+            font-size: 1.1rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        .confidence-meter {
+            margin-top: 2rem;
+        }
+
+        .confidence-bar {
+            width: 100%;
+            height: 30px;
+            background: #e5e7eb;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b35 0%, #f7931e 100%);
+            transition: width 1s ease;
+        }
+
+        .confidence-label {
+            text-align: center;
+            font-weight: 600;
+            color: #ff6b35;
+        }
+
+        .factors-list {
+            list-style: none;
+        }
+
+        .factor-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .factor-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .factor-impact {
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 8px;
+        }
+
+        .factor-impact.positive {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .factor-impact.negative {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Player Analysis */
+        .player-search {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .player-search input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1.1rem;
+        }
+
+        .player-search input:focus {
+            outline: none;
+            border-color: #ff6b35;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        .player-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-top: none;
+            border-radius: 0 0 12px 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 10;
+            display: none;
+        }
+
+        .player-suggestions.active {
+            display: block;
+        }
+
+        .player-suggestion-item {
+            padding: 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid #f3f4f6;
+            transition: background 0.2s;
+        }
+
+        .player-suggestion-item:hover {
+            background: #f9fafb;
+        }
+
+        .player-suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .player-profile {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 3rem;
+        }
+
+        .player-profile h3 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .player-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .player-info-item {
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .player-info-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+
+        .player-info-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ff6b35;
+        }
+
+        .analysis-charts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Model Cards */
+        .model-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .model-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .model-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .model-card h3 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        .model-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff6b35;
+        }
+
+        .comparison-chart-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+
+        .comparison-chart-card h3 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Explorer Controls */
+        .explorer-controls {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 3rem;
+            display: flex;
+            gap: 2rem;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .filter-group select {
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .filter-btn {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .explorer-charts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .data-table-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 3rem;
+        }
+
+        .data-table-card h3 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Scroll Animation */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .scroll-animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="logo">
+            <span>🏏</span>
+            <span>Cricket Prediction</span>
+        </div>
+        <div class="hamburger" onclick="toggleSidebar()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <ul class="sidebar-nav">
+            <li><button class="active" onclick="showPage('dashboard')">Dashboard</button></li>
+            <li><button onclick="showPage('predictions')">Real-time Predictions</button></li>
+            <li><button onclick="showPage('player-analysis')">Player Analysis</button></li>
+            <li><button onclick="showPage('model-comparison')">Model Comparison</button></li>
+            <li><button onclick="showPage('data-explorer')">Data Explorer</button></li>
+        </ul>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="parallax-shapes">
+            <div class="cricket-ball cricket-ball1"></div>
+            <div class="cricket-ball cricket-ball2"></div>
+            <div class="cricket-ball cricket-ball3"></div>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-title">Cricket Century Prediction</h1>
+            <p class="hero-subtitle">Advanced ML-powered analysis for predicting cricket centuries</p>
+            <div class="hero-nav">
+                <button class="hero-nav-item active" onclick="showPage('dashboard')">Dashboard</button>
+                <button class="hero-nav-item" onclick="showPage('predictions')">Predictions</button>
+                <button class="hero-nav-item" onclick="showPage('player-analysis')">Analysis</button>
+                <button class="hero-nav-item" onclick="showPage('model-comparison')">Models</button>
+                <button class="hero-nav-item" onclick="showPage('data-explorer')">Data</button>
+            </div>
+            <button class="discover-btn" onclick="scrollToContent()">Discover →</button>
+        </div>
+    </section>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+        <div class="container">
+            <!-- Dashboard Page -->
+            <div id="dashboard" class="page active">
+                <h2>📊 Dashboard</h2>
+                
+                <!-- Key Metrics -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">2,847</div>
+                        <div class="metric-label">Active Players</div>
+                        <div class="metric-change positive">↑ 12%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">87.3%</div>
+                        <div class="metric-label">Model Accuracy</div>
+                        <div class="metric-change positive">↑ 2.1%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">156</div>
+                        <div class="metric-label">Predictions Today</div>
+                        <div class="metric-change positive">↑ 23%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">45.2K</div>
+                        <div class="metric-label">Data Points</div>
+                        <div class="metric-change positive">↑ 5.8%</div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="charts-grid">
+                    <div class="chart-card scroll-animate">
+                        <h3>Model Performance Over Time</h3>
+                        <div id="performance-chart"></div>
+                    </div>
+                    <div class="chart-card scroll-animate">
+                        <h3>Century Over Prediction</h3>
+                        <div id="century-prediction-chart"></div>
+                    </div>
+                </div>
+
+                <!-- Recent Predictions -->
+                <div class="table-card scroll-animate">
+                    <h3>Recent Predictions</h3>
+                    <div class="table-container">
+                        <table id="recent-predictions-table">
+                            <thead>
+                                <tr>
+                                    <th>Player</th>
+                                    <th>Match</th>
+                                    <th>Prediction</th>
+                                    <th>Confidence</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="predictions-table-body">
+                                <!-- Data will be populated dynamically by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Real-time Predictions Page -->
+            <div id="predictions" class="page">
+                <h2>🎯 Real-time Predictions</h2>
+                
+                <!-- Input Form -->
+                <div class="prediction-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="player-name">Player Name</label>
+                            <select id="player-name">
+                                <!-- Options populated by JavaScript -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="match-format">Match Format</label>
+                            <select id="match-format">
+                                <option value="Test">Test</option>
+                                <option value="ODI" selected>ODI</option>
+                                <option value="T20">T20</option>
+                                <option value="T10">T10</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="opposition">Opposition Team</label>
+                            <input type="text" id="opposition" value="England" placeholder="Opposition team">
+                        </div>
+                        <div class="form-group">
+                            <label for="venue">Venue</label>
+                            <input type="text" id="venue" value="Sydney Cricket Ground" placeholder="Match venue">
+                        </div>
+                    </div>
+
+                    <!-- Match Conditions -->
+                    <h3>Match Conditions</h3>
+                    <div class="conditions-grid">
+                        <div class="form-group">
+                            <label for="weather">Weather</label>
+                            <select id="weather">
+                                <option value="Clear" selected>Clear</option>
+                                <option value="Overcast">Overcast</option>
+                                <option value="Light Rain">Light Rain</option>
+                                <option value="Heavy Rain">Heavy Rain</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="pitch-type">Pitch Type</label>
+                            <select id="pitch-type">
+                                <option value="Flat" selected>Flat</option>
+                                <option value="Green">Green</option>
+                                <option value="Dusty">Dusty</option>
+                                <option value="Cracked">Cracked</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="temperature">Temperature (°C)</label>
+                            <input type="number" id="temperature" value="25" min="5" max="45">
+                        </div>
+                    </div>
+
+                    <button class="predict-btn" onclick="makePrediction()">Generate Prediction</button>
+                </div>
+
+                <!-- Prediction Results -->
+                <div id="prediction-results" class="prediction-results" style="display: none;">
+                    <div class="result-card">
+                        <h3>Prediction Results</h3>
+                        <div class="prediction-display">
+                            <div class="prediction-value" id="prediction-value">85%</div>
+                            <div class="prediction-label">Century Probability</div>
+                        </div>
+                        <div class="confidence-meter">
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" id="confidence-fill"></div>
+                            </div>
+                            <div class="confidence-label" id="confidence-label">High Confidence</div>
+                        </div>
+                    </div>
+
+                    <div class="factors-card">
+                        <h3>Key Factors</h3>
+                        <div class="factors-list" id="factors-list">
+                            <!-- Factors will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Player Analysis Page -->
+            <div id="player-analysis" class="page">
+                <h2>👤 Player Analysis</h2>
+                
+                <div class="player-search">
+                    <input type="text" id="player-search" placeholder="Search for a player..." onkeyup="searchPlayers()">
+                    <div id="player-suggestions" class="player-suggestions"></div>
+                </div>
+
+                <div class="player-profile" id="player-profile">
+                    <p style="text-align: center; color: #666; padding: 2rem;">Search for a player to view their detailed analysis</p>
+                </div>
+
+                <div class="analysis-charts">
+                    <div class="chart-card">
+                        <h3>Form Trend (Last 10 Matches)</h3>
+                        <div id="form-chart"></div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Performance by Venue</h3>
+                        <div id="venue-chart"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Model Comparison Page -->
+            <div id="model-comparison" class="page">
+                <h2>🤖 Model Comparison</h2>
+                
+                <div class="model-metrics">
+                    <div class="model-card">
+                        <h3>TensorFlow Model</h3>
+                        <div class="model-stats">
+                            <div class="stat">
+                                <span class="stat-label">Accuracy</span>
+                                <span class="stat-value">85.7%</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Precision</span>
+                                <span class="stat-value">82.3%</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Recall</span>
+                                <span class="stat-value">87.1%</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">F1 Score</span>
+                                <span class="stat-value">84.6%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="model-card">
+                        <h3>PyTorch Model</h3>
+                        <div class="model-stats">
+                            <div class="stat">
+                                <span class="stat-label">Accuracy</span>
+                                <span class="stat-value">83.4%</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Precision</span>
+                                <span class="stat-value">80.1%</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Recall</span>
+                                <span class="stat-value">85.9%</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">F1 Score</span>
+                                <span class="stat-value">82.9%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="model-card">
+                        <h3>Ensemble Model</h3>
+                        <div class="model-stats">
+                            <div class="stat">
+                                <span class="stat-label">Accuracy</span>
+                                <span class="stat-value">88.2%</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Precision</span>
+                                <span class="stat-value">86.7%</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Recall</span>
+                                <span class="stat-value">89.3%</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">F1 Score</span>
+                                <span class="stat-value">88.0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="comparison-chart-card">
+                    <h3>Model Performance Comparison</h3>
+                    <div id="model-comparison-chart"></div>
+                </div>
+
+                <div class="comparison-chart-card">
+                    <h3>Feature Importance by Model</h3>
+                    <div id="feature-importance-chart"></div>
+                </div>
+
+                <div class="comparison-chart-card">
+                    <h3>Training Time vs Accuracy</h3>
+                    <div id="training-time-chart"></div>
+                </div>
+
+                <div class="comparison-chart-card">
+                    <h3>Performance Metrics Comparison</h3>
+                    <div id="metrics-comparison-chart"></div>
+                </div>
+            </div>
+
+            <!-- Data Explorer Page -->
+            <div id="data-explorer" class="page">
+                <h2>📈 Data Explorer</h2>
+                
+                <div class="explorer-controls">
+                    <div class="filter-group">
+                        <label for="format-filter">Format:</label>
+                        <select id="format-filter">
+                            <option value="all">All Formats</option>
+                            <option value="Test">Test</option>
+                            <option value="ODI">ODI</option>
+                            <option value="T20">T20</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="country-filter">Country:</label>
+                        <select id="country-filter">
+                            <option value="all">All Countries</option>
+                            <option value="India">India</option>
+                            <option value="Australia">Australia</option>
+                            <option value="England">England</option>
+                            <option value="New Zealand">New Zealand</option>
+                            <option value="Sri Lanka">Sri Lanka</option>
+                            <option value="South Africa">South Africa</option>
+                            <option value="West Indies">West Indies</option>
+                        </select>
+                    </div>
+                    <button class="filter-btn" onclick="applyFilters()">Apply Filters</button>
+                </div>
+
+                <div class="explorer-charts">
+                    <div class="chart-card">
+                        <h3>Century Distribution by Country</h3>
+                        <div id="country-distribution-chart"></div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Average Scores by Format</h3>
+                        <div id="format-scores-chart"></div>
+                    </div>
+                </div>
+
+                <div class="explorer-charts">
+                    <div class="chart-card">
+                        <h3>Data Quality Metrics</h3>
+                        <div id="data-quality-chart"></div>
+                    </div>
+                </div>
+
+                <div class="data-table-card">
+                    <h3>Player Statistics</h3>
+                    <div class="table-container">
+                        <table id="player-stats-table">
+                            <thead>
+                                <tr>
+                                    <th>Player</th>
+                                    <th>Country</th>
+                                    <th>Matches</th>
+                                    <th>Runs</th>
+                                    <th>Average</th>
+                                    <th>Centuries</th>
+                                    <th>Strike Rate</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stats-table-body">
+                                <!-- Data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p style="opacity: 0.8;">© 2025 Cricket Century Prediction Platform</p>
+        </footer>
+    </div>
+
+    <script>
+        // Comprehensive Player Database - Top 5 from each country
+        const allPlayers = [
+            // India
+            { name: 'Virat Kohli', country: 'India', matches: 274, runs: 13906, avg: 58.2, centuries: 50, sr: 93.5 },
+            { name: 'Rohit Sharma', country: 'India', matches: 265, runs: 10866, avg: 49.1, centuries: 31, sr: 90.2 },
+            { name: 'Shikhar Dhawan', country: 'India', matches: 167, runs: 6793, avg: 44.1, centuries: 17, sr: 94.3 },
+            { name: 'KL Rahul', country: 'India', matches: 67, runs: 2866, avg: 47.2, centuries: 7, sr: 86.8 },
+            { name: 'Shreyas Iyer', country: 'India', matches: 47, runs: 1805, avg: 42.9, centuries: 3, sr: 95.3 },
+            
+            // Australia
+            { name: 'Steve Smith', country: 'Australia', matches: 158, runs: 5131, avg: 43.3, centuries: 12, sr: 89.5 },
+            { name: 'David Warner', country: 'Australia', matches: 161, runs: 6932, avg: 45.3, centuries: 22, sr: 97.4 },
+            { name: 'Aaron Finch', country: 'Australia', matches: 146, runs: 5401, avg: 39.0, centuries: 17, sr: 88.2 },
+            { name: 'Marnus Labuschagne', country: 'Australia', matches: 29, runs: 1326, avg: 52.1, centuries: 4, sr: 84.7 },
+            { name: 'Travis Head', country: 'Australia', matches: 53, runs: 1958, avg: 40.8, centuries: 4, sr: 92.6 },
+            
+            // England
+            { name: 'Joe Root', country: 'England', matches: 171, runs: 6323, avg: 47.7, centuries: 16, sr: 87.5 },
+            { name: 'Jos Buttler', country: 'England', matches: 181, runs: 5275, avg: 40.1, centuries: 10, sr: 119.5 },
+            { name: 'Jason Roy', country: 'England', matches: 115, runs: 4299, avg: 39.4, centuries: 10, sr: 105.3 },
+            { name: 'Jonny Bairstow', country: 'England', matches: 100, runs: 3935, avg: 47.5, centuries: 11, sr: 104.8 },
+            { name: 'Ben Stokes', country: 'England', matches: 113, runs: 3100, avg: 38.7, centuries: 3, sr: 94.2 },
+            
+            // New Zealand
+            { name: 'Kane Williamson', country: 'New Zealand', matches: 167, runs: 6941, avg: 47.5, centuries: 13, sr: 81.8 },
+            { name: 'Ross Taylor', country: 'New Zealand', matches: 236, runs: 8607, avg: 48.2, centuries: 21, sr: 83.7 },
+            { name: 'Martin Guptill', country: 'New Zealand', matches: 198, runs: 7346, avg: 41.7, centuries: 18, sr: 87.5 },
+            { name: 'Devon Conway', country: 'New Zealand', matches: 32, runs: 1431, avg: 49.3, centuries: 3, sr: 88.6 },
+            { name: 'Tom Latham', country: 'New Zealand', matches: 87, runs: 2587, avg: 33.2, centuries: 5, sr: 76.4 },
+            
+            // Sri Lanka
+            { name: 'Kumar Sangakkara', country: 'Sri Lanka', matches: 404, runs: 14234, avg: 41.9, centuries: 25, sr: 78.9 },
+            { name: 'Mahela Jayawardene', country: 'Sri Lanka', matches: 448, runs: 12650, avg: 33.4, centuries: 19, sr: 78.9 },
+            { name: 'Tillakaratne Dilshan', country: 'Sri Lanka', matches: 330, runs: 10290, avg: 39.3, centuries: 22, sr: 86.7 },
+            { name: 'Kusal Perera', country: 'Sri Lanka', matches: 166, runs: 4441, avg: 33.0, centuries: 6, sr: 83.3 },
+            { name: 'Angelo Mathews', country: 'Sri Lanka', matches: 233, runs: 6008, avg: 42.9, centuries: 4, sr: 82.6 },
+            
+            // South Africa
+            { name: 'AB de Villiers', country: 'South Africa', matches: 228, runs: 9577, avg: 53.5, centuries: 25, sr: 101.1 },
+            { name: 'Hashim Amla', country: 'South Africa', matches: 181, runs: 8113, avg: 49.5, centuries: 27, sr: 88.4 },
+            { name: 'Quinton de Kock', country: 'South Africa', matches: 143, runs: 6237, avg: 44.9, centuries: 17, sr: 95.7 },
+            { name: 'Faf du Plessis', country: 'South Africa', matches: 143, runs: 5507, avg: 47.5, centuries: 12, sr: 88.7 },
+            { name: 'Jacques Kallis', country: 'South Africa', matches: 328, runs: 11579, avg: 44.4, centuries: 17, sr: 72.9 },
+            
+            // West Indies
+            { name: 'Chris Gayle', country: 'West Indies', matches: 301, runs: 10480, avg: 37.8, centuries: 25, sr: 87.2 },
+            { name: 'Brian Lara', country: 'West Indies', matches: 299, runs: 10405, avg: 40.5, centuries: 19, sr: 79.5 },
+            { name: 'Marlon Samuels', country: 'West Indies', matches: 207, runs: 5606, avg: 33.9, centuries: 10, sr: 76.2 },
+            { name: 'Shivnarine Chanderpaul', country: 'West Indies', matches: 268, runs: 8778, avg: 41.6, centuries: 11, sr: 63.8 },
+            { name: 'Ramnaresh Sarwan', country: 'West Indies', matches: 181, runs: 5842, avg: 42.7, centuries: 11, sr: 73.9 }
+        ];
+
+        // Navigation Functions
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const hamburger = document.querySelector('.hamburger');
+            sidebar.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update nav buttons
+            document.querySelectorAll('.sidebar-nav button, .hero-nav-item').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            
+            // Close sidebar on mobile
+            const sidebar = document.querySelector('.sidebar');
+            const hamburger = document.querySelector('.hamburger');
+            sidebar.classList.remove('active');
+            hamburger.classList.remove('active');
+        }
+
+        function scrollToContent() {
+            document.querySelector('.content-wrapper').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.main-header');
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            
+            // Scroll animations
+            const animateElements = document.querySelectorAll('.scroll-animate');
+            animateElements.forEach(el => {
+                const elementTop = el.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                if (elementTop < windowHeight - 100) {
+                    el.classList.add('visible');
+                }
+            });
+        });
+
+        // Make Prediction
+        function makePrediction() {
+            const playerName = document.getElementById('player-name').value;
+            const resultsDiv = document.getElementById('prediction-results');
+            const predictionValue = document.getElementById('prediction-value');
+            const confidenceFill = document.getElementById('confidence-fill');
+            const confidenceLabel = document.getElementById('confidence-label');
+            const factorsList = document.getElementById('factors-list');
+            
+            // Find player data
+            const player = allPlayers.find(p => p.name === playerName);
+            
+            if (!player) {
+                alert('Please select a player');
+                return;
+            }
+            
+            // Generate prediction based on player stats
+            const baseScore = Math.min(95, Math.max(55, player.avg + Math.random() * 10));
+            const prediction = Math.floor(baseScore);
+            const confidence = prediction > 75 ? 'High' : prediction > 60 ? 'Medium' : 'Low';
+            
+            predictionValue.textContent = prediction + '%';
+            confidenceFill.style.width = prediction + '%';
+            confidenceLabel.textContent = confidence + ' Confidence';
+            
+            // Generate factors
+            const factors = [
+                { name: 'Recent Form', impact: prediction > 70 ? 'positive' : 'negative', value: prediction > 70 ? '+15%' : '-8%' },
+                { name: 'Venue History', impact: 'positive', value: '+12%' },
+                { name: 'Opposition Strength', impact: prediction > 65 ? 'negative' : 'positive', value: prediction > 65 ? '-7%' : '+5%' },
+                { name: 'Weather Conditions', impact: 'positive', value: '+9%' },
+                { name: 'Pitch Type', impact: prediction > 60 ? 'positive' : 'negative', value: prediction > 60 ? '+11%' : '-6%' }
+            ];
+            
+            factorsList.innerHTML = factors.map(factor => `
+                <div class="factor-item">
+                    <span class="factor-name">${factor.name}</span>
+                    <span class="factor-impact ${factor.impact}">${factor.value}</span>
+                </div>
+            `).join('');
+            
+            resultsDiv.style.display = 'grid';
+        }
+
+        // Search Players
+        function searchPlayers() {
+            const searchInput = document.getElementById('player-search');
+            const searchTerm = searchInput.value.toLowerCase();
+            const suggestionsDiv = document.getElementById('player-suggestions');
+            
+            if (searchTerm.length < 2) {
+                suggestionsDiv.classList.remove('active');
+                return;
+            }
+            
+            const matchingPlayers = allPlayers.filter(player => 
+                player.name.toLowerCase().includes(searchTerm)
+            );
+            
+            if (matchingPlayers.length > 0) {
+                suggestionsDiv.innerHTML = matchingPlayers.map(player => `
+                    <div class="player-suggestion-item" onclick="selectPlayer('${player.name}')">
+                        <strong>${player.name}</strong> - ${player.country}
+                    </div>
+                `).join('');
+                suggestionsDiv.classList.add('active');
+            } else {
+                suggestionsDiv.classList.remove('active');
+            }
+        }
+
+        // Select Player for Analysis
+        function selectPlayer(playerName) {
+            const player = allPlayers.find(p => p.name === playerName);
+            const suggestionsDiv = document.getElementById('player-suggestions');
+            const searchInput = document.getElementById('player-search');
+            const profileDiv = document.getElementById('player-profile');
+            
+            searchInput.value = playerName;
+            suggestionsDiv.classList.remove('active');
+            
+            if (player) {
+                profileDiv.innerHTML = `
+                    <h3>${player.name}</h3>
+                    <p style="color: #666; margin-bottom: 1.5rem;">${player.country}</p>
+                    <div class="player-info">
+                        <div class="player-info-item">
+                            <div class="player-info-label">Matches</div>
+                            <div class="player-info-value">${player.matches}</div>
+                        </div>
+                        <div class="player-info-item">
+                            <div class="player-info-label">Total Runs</div>
+                            <div class="player-info-value">${player.runs}</div>
+                        </div>
+                        <div class="player-info-item">
+                            <div class="player-info-label">Average</div>
+                            <div class="player-info-value">${player.avg}</div>
+                        </div>
+                        <div class="player-info-item">
+                            <div class="player-info-label">Centuries</div>
+                            <div class="player-info-value">${player.centuries}</div>
+                        </div>
+                        <div class="player-info-item">
+                            <div class="player-info-label">Strike Rate</div>
+                            <div class="player-info-value">${player.sr}</div>
+                        </div>
+                    </div>
+                `;
+                
+                // Update form chart
+                updateFormChart(player);
+                updateVenueChart(player);
+            }
+        }
+
+        // Update Form Chart
+        function updateFormChart(player) {
+            const formData = [{
+                x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                y: Array(10).fill(0).map(() => Math.floor(Math.random() * 50) + player.avg - 10),
+                type: 'scatter',
+                mode: 'lines+markers',
+                line: { color: '#ff6b35', width: 3 },
+                marker: { size: 8, color: '#f7931e' }
+            }];
+            
+            const formLayout = {
+                margin: { t: 20, r: 20, b: 40, l: 50 },
+                xaxis: { title: 'Match' },
+                yaxis: { title: 'Score' },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)'
+            };
+            
+            Plotly.newPlot('form-chart', formData, formLayout, { responsive: true });
+        }
+
+        // Update Venue Chart with Multi-color bars - Actual venue names
+        function updateVenueChart(player) {
+            const venues = [
+                'Lord\'s', 
+                'MCG', 
+                'Eden Gardens', 
+                'SCG', 
+                'The Oval',
+                'Wankhede'
+            ];
+            const scores = [
+                player.avg + Math.floor(Math.random() * 10) - 3,
+                player.avg + Math.floor(Math.random() * 10) - 5,
+                player.avg + Math.floor(Math.random() * 10) - 2,
+                player.avg + Math.floor(Math.random() * 10) - 4,
+                player.avg + Math.floor(Math.random() * 10) - 3,
+                player.avg + Math.floor(Math.random() * 10) - 2
+            ];
+            const colors = ['#ff6b35', '#f7931e', '#f093fb', '#4ade80', '#60a5fa', '#a78bfa'];
+            
+            const venueData = [{
+                x: venues,
+                y: scores,
+                type: 'bar',
+                marker: {
+                    color: colors
+                }
+            }];
+            
+            const venueLayout = {
+                margin: { t: 20, r: 20, b: 80, l: 50 },
+                xaxis: { 
+                    title: 'Venues',
+                    tickangle: -45
+                },
+                yaxis: { title: 'Average Score' },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)'
+            };
+            
+            Plotly.newPlot('venue-chart', venueData, venueLayout, { responsive: true });
+        }
+
+        // Apply Filters
+        function applyFilters() {
+            const format = document.getElementById('format-filter').value;
+            const country = document.getElementById('country-filter').value;
+            
+            // Filter players based on country
+            let filteredPlayers = [...allPlayers];
+            
+            if (country !== 'all') {
+                filteredPlayers = filteredPlayers.filter(p => p.country === country);
+            }
+            
+            // Populate stats table
+            const statsTableBody = document.getElementById('stats-table-body');
+            statsTableBody.innerHTML = filteredPlayers.map(player => `
+                <tr>
+                    <td>${player.name}</td>
+                    <td>${player.country}</td>
+                    <td>${player.matches}</td>
+                    <td>${player.runs}</td>
+                    <td>${player.avg}</td>
+                    <td>${player.centuries}</td>
+                    <td>${player.sr}</td>
+                </tr>
+            `).join('');
+            
+            // Update country distribution chart based on filter
+            updateCountryChart(filteredPlayers);
+            updateDataQualityChart();
+        }
+
+        // Update Country Distribution Chart as Multi-color Pie Chart
+        function updateCountryChart(players) {
+            const countryCounts = {};
+            players.forEach(player => {
+                countryCounts[player.country] = (countryCounts[player.country] || 0) + player.centuries;
+            });
+            
+            const countries = Object.keys(countryCounts);
+            const centuries = Object.values(countryCounts);
+            
+            const colors = [
+                '#ff6b35', '#f7931e', '#f093fb', '#4ade80', 
+                '#60a5fa', '#a78bfa', '#fb923c'
+            ];
+            
+            const countryData = [{
+                labels: countries,
+                values: centuries,
+                type: 'pie',
+                marker: {
+                    colors: colors.slice(0, countries.length)
+                },
+                textinfo: 'label+percent',
+                textposition: 'outside',
+                automargin: true
+            }];
+            
+            const layout = {
+                margin: { t: 20, r: 20, b: 20, l: 20 },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                showlegend: true,
+                legend: {
+                    orientation: 'v',
+                    x: 1.1,
+                    y: 0.5
+                }
+            };
+            
+            Plotly.newPlot('country-distribution-chart', countryData, layout, { responsive: true });
+        }
+
+        // Update Data Quality Chart
+        function updateDataQualityChart() {
+            const metrics = ['Completeness', 'Accuracy', 'Consistency', 'Timeliness'];
+            const scores = [94.5, 91.2, 88.7, 96.3];
+            const colors = ['#ff6b35', '#f7931e', '#f093fb', '#4ade80'];
+            
+            const qualityData = [{
+                x: metrics,
+                y: scores,
+                type: 'bar',
+                marker: {
+                    color: colors
+                }
+            }];
+            
+            const layout = {
+                margin: { t: 20, r: 20, b: 60, l: 50 },
+                xaxis: { title: 'Metric' },
+                yaxis: { 
+                    title: 'Score (%)',
+                    range: [0, 100]
+                },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)'
+            };
+            
+            Plotly.newPlot('data-quality-chart', qualityData, layout, { responsive: true });
+        }
+
+        // Initialize Charts
+        function initCharts() {
+            // Model Performance Over Time - Line chart with 3 models
+            const performanceData = [
+                {
+                    x: ['Jan 2024', 'Feb 2024', 'Mar 2024', 'Apr 2024', 'May 2024', 'Jun 2024'],
+                    y: [82.1, 83.5, 84.2, 84.8, 85.3, 85.7],
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    name: 'TensorFlow',
+                    line: { color: '#ff6b35', width: 3 },
+                    marker: { size: 8 }
+                },
+                {
+                    x: ['Jan 2024', 'Feb 2024', 'Mar 2024', 'Apr 2024', 'May 2024', 'Jun 2024'],
+                    y: [79.5, 80.8, 81.6, 82.3, 82.9, 83.4],
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    name: 'PyTorch',
+                    line: { color: '#f7931e', width: 3 },
+                    marker: { size: 8 }
+                },
+                {
+                    x: ['Jan 2024', 'Feb 2024', 'Mar 2024', 'Apr 2024', 'May 2024', 'Jun 2024'],
+                    y: [84.2, 85.3, 86.1, 86.9, 87.5, 88.2],
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    name: 'Ensemble',
+                    line: { color: '#f093fb', width: 3 },
+                    marker: { size: 8 }
+                }
+            ];
+            
+            const performanceLayout = {
+                margin: { t: 20, r: 20, b: 60, l: 50 },
+                xaxis: { title: 'Month' },
+                yaxis: { title: 'Accuracy (%)' },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                legend: { x: 0, y: 1.1, orientation: 'h' }
+            };
+            
+            Plotly.newPlot('performance-chart', performanceData, performanceLayout, { responsive: true });
+
+            // Century Over Prediction - Bar chart comparing actual vs predicted
+            const centuryPredictionData = [
+                {
+                    x: ['India', 'Australia', 'England', 'New Zealand', 'Sri Lanka', 'South Africa', 'West Indies'],
+                    y: [187, 168, 151, 98, 87, 156, 120],
+                    type: 'bar',
+                    name: 'Actual Centuries',
+                    marker: { color: '#ff6b35' }
+                },
+                {
+                    x: ['India', 'Australia', 'England', 'New Zealand', 'Sri Lanka', 'South Africa', 'West Indies'],
+                    y: [179, 174, 145, 102, 89, 149, 115],
+                    type: 'bar',
+                    name: 'Predicted Centuries',
+                    marker: { color: '#f7931e' }
+                }
+            ];
+            
+            const centuryLayout = {
+                margin: { t: 20, r: 20, b: 60, l: 50 },
+                xaxis: { title: 'Country' },
+                yaxis: { title: 'Number of Centuries' },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                barmode: 'group',
+                legend: { x: 0, y: 1.1, orientation: 'h' }
+            };
+            
+            Plotly.newPlot('century-prediction-chart', centuryPredictionData, centuryLayout, { responsive: true });
+
+            // Model Comparison Chart
+            const modelData = [{
+                x: ['TensorFlow', 'PyTorch', 'Ensemble'],
+                y: [85.7, 83.4, 88.2],
+                type: 'bar',
+                marker: {
+                    color: ['#ff6b35', '#f7931e', '#f093fb']
+                }
+            }];
+            
+            const modelLayout = {
+                margin: { t: 20, r: 20, b: 40, l: 50 },
+                yaxis: { title: 'Accuracy (%)' },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)'
+            };
+            
+            Plotly.newPlot('model-comparison-chart', modelData, modelLayout, { responsive: true });
+
+            // Feature Importance by Model
+            const featureImportanceData = [
+                {
+                    x: ['Player Form', 'Venue', 'Opposition', 'Weather', 'Pitch'],
+                    y: [28, 22, 18, 16, 16],
+                    type: 'bar',
+                    name: 'TensorFlow',
+                    marker: { color: '#ff6b35' }
+                },
+                {
+                    x: ['Player Form', 'Venue', 'Opposition', 'Weather', 'Pitch'],
+                    y: [26, 20, 19, 18, 17],
+                    type: 'bar',
+                    name: 'PyTorch',
+                    marker: { color: '#f7931e' }
+                },
+                {
+                    x: ['Player Form', 'Venue', 'Opposition', 'Weather', 'Pitch'],
+                    y: [30, 23, 17, 15, 15],
+                    type: 'bar',
+                    name: 'Ensemble',
+                    marker: { color: '#f093fb' }
+                }
+            ];
+            
+            const featureLayout = {
+                margin: { t: 20, r: 20, b: 60, l: 50 },
+                xaxis: { title: 'Feature' },
+                yaxis: { title: 'Importance (%)' },
+                barmode: 'group',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                legend: { x: 0, y: 1.1, orientation: 'h' }
+            };
+            
+            Plotly.newPlot('feature-importance-chart', featureImportanceData, featureLayout, { responsive: true });
+
+            // Training Time vs Accuracy
+            const trainingData = [
+                {
+                    x: [45, 62, 87],
+                    y: [85.7, 83.4, 88.2],
+                    mode: 'markers',
+                    type: 'scatter',
+                    text: ['TensorFlow', 'PyTorch', 'Ensemble'],
+                    marker: {
+                        size: [20, 20, 20],
+                        color: ['#ff6b35', '#f7931e', '#f093fb']
+                    },
+                    textposition: 'top center',
+                    showlegend: false
+                }
+            ];
+            
+            const trainingLayout = {
+                margin: { t: 20, r: 20, b: 60, l: 50 },
+                xaxis: { title: 'Training Time (minutes)' },
+                yaxis: { title: 'Accuracy (%)' },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)'
+            };
+            
+            Plotly.newPlot('training-time-chart', trainingData, trainingLayout, { responsive: true });
+
+            // Performance Metrics Comparison - Multi-color bar chart
+            const metricsComparisonData = [
+                {
+                    x: ['TensorFlow', 'PyTorch', 'Ensemble'],
+                    y: [85.7, 83.4, 88.2],
+                    type: 'bar',
+                    name: 'Accuracy',
+                    marker: { color: '#ff6b35' }
+                },
+                {
+                    x: ['TensorFlow', 'PyTorch', 'Ensemble'],
+                    y: [82.3, 80.1, 86.7],
+                    type: 'bar',
+                    name: 'Precision',
+                    marker: { color: '#f7931e' }
+                },
+                {
+                    x: ['TensorFlow', 'PyTorch', 'Ensemble'],
+                    y: [87.1, 85.9, 89.3],
+                    type: 'bar',
+                    name: 'Recall',
+                    marker: { color: '#f093fb' }
+                },
+                {
+                    x: ['TensorFlow', 'PyTorch', 'Ensemble'],
+                    y: [84.6, 82.9, 88.0],
+                    type: 'bar',
+                    name: 'F1 Score',
+                    marker: { color: '#4ade80' }
+                }
+            ];
+            
+            const metricsLayout = {
+                margin: { t: 20, r: 20, b: 60, l: 50 },
+                xaxis: { title: 'Model' },
+                yaxis: { title: 'Score (%)' },
+                barmode: 'group',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                legend: { x: 0, y: 1.1, orientation: 'h' }
+            };
+            
+            Plotly.newPlot('metrics-comparison-chart', metricsComparisonData, metricsLayout, { responsive: true });
+
+            // Format Scores Chart - Multi-color bars
+            const formats = ['Test', 'ODI', 'T20'];
+            const formatScores = [48.7, 42.3, 31.8];
+            const formatColors = ['#ff6b35', '#f7931e', '#f093fb'];
+            
+            const scoresData = [{
+                x: formats,
+                y: formatScores,
+                type: 'bar',
+                marker: {
+                    color: formatColors
+                }
+            }];
+            
+            const formatLayout = {
+                margin: { t: 20, r: 20, b: 60, l: 50 },
+                xaxis: { title: 'Format' },
+                yaxis: { title: 'Average Score' },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)'
+            };
+            
+            Plotly.newPlot('format-scores-chart', scoresData, formatLayout, { responsive: true });
+            
+            // Initial player analysis charts
+            const emptyLayout = {
+                margin: { t: 20, r: 20, b: 40, l: 50 },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)'
+            };
+            
+            Plotly.newPlot('form-chart', [], emptyLayout, { responsive: true });
+            Plotly.newPlot('venue-chart', [], emptyLayout, { responsive: true });
+        }
+
+        // Populate player dropdown
+        function populatePlayerDropdown() {
+            const playerSelect = document.getElementById('player-name');
+            playerSelect.innerHTML = allPlayers.map(player => 
+                `<option value="${player.name}">${player.name} (${player.country})</option>`
+            ).join('');
+        }
+
+        // Realistic Match Simulation System
+        function generateRealisticMatches() {
+            const matches = [];
+            const matchups = [
+                { teams: ['IND', 'AUS'], venue: 'MCG, Melbourne', format: 'ODI' },
+                { teams: ['ENG', 'NZ'], venue: 'Lord\'s, London', format: 'Test' },
+                { teams: ['PAK', 'SA'], venue: 'Wanderers, Johannesburg', format: 'T20' },
+                { teams: ['IND', 'ENG'], venue: 'Wankhede, Mumbai', format: 'ODI' },
+                { teams: ['AUS', 'WI'], venue: 'SCG, Sydney', format: 'ODI' },
+                { teams: ['NZ', 'SL'], venue: 'Eden Park, Auckland', format: 'T20' },
+                { teams: ['SA', 'IND'], venue: 'Centurion', format: 'Test' },
+                { teams: ['AUS', 'ENG'], venue: 'The Oval, London', format: 'Test' },
+                { teams: ['IND', 'WI'], venue: 'Eden Gardens, Kolkata', format: 'ODI' },
+                { teams: ['ENG', 'PAK'], venue: 'Old Trafford, Manchester', format: 'T20' }
+            ];
+
+            const countryPlayerMap = {
+                'IND': allPlayers.filter(p => p.country === 'India'),
+                'AUS': allPlayers.filter(p => p.country === 'Australia'),
+                'ENG': allPlayers.filter(p => p.country === 'England'),
+                'NZ': allPlayers.filter(p => p.country === 'New Zealand'),
+                'SA': allPlayers.filter(p => p.country === 'South Africa'),
+                'WI': allPlayers.filter(p => p.country === 'West Indies'),
+                'SL': allPlayers.filter(p => p.country === 'Sri Lanka'),
+                'PAK': [
+                    { name: 'Babar Azam', avg: 56.8 },
+                    { name: 'Mohammad Rizwan', avg: 48.3 },
+                    { name: 'Fakhar Zaman', avg: 44.2 }
+                ]
+            };
+
+            // Generate 3 ongoing matches
+            for (let i = 0; i < 3; i++) {
+                const matchup = matchups[i];
+                const playerCountry = matchup.teams[0];
+                const players = countryPlayerMap[playerCountry];
+                const player = players[Math.floor(Math.random() * Math.min(3, players.length))];
+                
+                const prediction = Math.floor(65 + Math.random() * 25);
+                const confidence = prediction > 75 ? 'High' : prediction > 60 ? 'Medium' : 'Low';
+                
+                matches.push({
+                    player: player.name,
+                    match: `${matchup.teams[0]} vs ${matchup.teams[1]}`,
+                    venue: matchup.venue,
+                    format: matchup.format,
+                    prediction: prediction,
+                    confidence: confidence,
+                    status: 'ongoing'
+                });
+            }
+
+            // Generate 4 upcoming matches
+            for (let i = 3; i < 7; i++) {
+                const matchup = matchups[i];
+                const playerCountry = matchup.teams[0];
+                const players = countryPlayerMap[playerCountry];
+                const player = players[Math.floor(Math.random() * Math.min(3, players.length))];
+                
+                const prediction = Math.floor(60 + Math.random() * 30);
+                const confidence = prediction > 75 ? 'High' : prediction > 60 ? 'Medium' : 'Low';
+                
+                const futureDate = new Date();
+                futureDate.setDate(futureDate.getDate() + i - 2);
+                
+                matches.push({
+                    player: player.name,
+                    match: `${matchup.teams[0]} vs ${matchup.teams[1]}`,
+                    venue: matchup.venue,
+                    format: matchup.format,
+                    prediction: prediction,
+                    confidence: confidence,
+                    status: 'upcoming',
+                    date: futureDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+                });
+            }
+
+            // Generate 3 completed matches
+            for (let i = 7; i < 10; i++) {
+                const matchup = matchups[i];
+                const playerCountry = matchup.teams[0];
+                const players = countryPlayerMap[playerCountry];
+                const player = players[Math.floor(Math.random() * Math.min(3, players.length))];
+                
+                const prediction = Math.floor(60 + Math.random() * 30);
+                const confidence = prediction > 75 ? 'High' : prediction > 60 ? 'Medium' : 'Low';
+                const actualScored = prediction > 70 ? (Math.random() > 0.3) : (Math.random() > 0.6);
+                
+                matches.push({
+                    player: player.name,
+                    match: `${matchup.teams[0]} vs ${matchup.teams[1]}`,
+                    venue: matchup.venue,
+                    format: matchup.format,
+                    prediction: prediction,
+                    confidence: confidence,
+                    status: 'completed',
+                    finalScore: actualScored ? Math.floor(100 + Math.random() * 85) : Math.floor(35 + Math.random() * 65),
+                    result: actualScored ? 'Century ✓' : 'No Century'
+                });
+            }
+
+            return matches;
+        }
+
+        // Populate predictions table
+        function populatePredictionsTable() {
+            const matches = generateRealisticMatches();
+            const tableBody = document.getElementById('predictions-table-body');
+            
+            tableBody.innerHTML = matches.map(match => {
+                const predictionClass = match.prediction > 70 ? 'prediction-high' : 'prediction-medium';
+                const confidenceClass = match.confidence === 'High' ? 'confidence-high' : 'confidence-medium';
+                let statusHTML = '';
+                
+                if (match.status === 'ongoing') {
+                    statusHTML = `<span class="status-ongoing">Ongoing</span>`;
+                } else if (match.status === 'upcoming') {
+                    statusHTML = `<span class="status-upcoming">Upcoming</span>`;
+                } else {
+                    statusHTML = `<span class="status-completed">Completed</span>`;
+                }
+                
+                return `
+                    <tr>
+                        <td><strong>${match.player}</strong></td>
+                        <td>${match.match}<br><small style="color: #666;">${match.venue}</small></td>
+                        <td><span class="${predictionClass}">${match.prediction}%</span></td>
+                        <td><span class="${confidenceClass}">${match.confidence}</span></td>
+                        <td>${statusHTML}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            initCharts();
+            applyFilters();
+            populatePlayerDropdown();
+            populatePredictionsTable();
+        });
+
+        // Close suggestions when clicking outside
+        document.addEventListener('click', (e) => {
+            const suggestionsDiv = document.getElementById('player-suggestions');
+            const searchInput = document.getElementById('player-search');
+            
+            if (e.target !== searchInput && e.target !== suggestionsDiv) {
+                suggestionsDiv.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
