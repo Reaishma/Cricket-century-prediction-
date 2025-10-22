@@ -17,8 +17,6 @@
 [![GitHub forks](https://img.shields.io/github/forks/Reaishma/Cricket-century-prediction-?style=social)](https://github.com/Reaishma/Cricket-century-prediction-/fork)
 [![GitHub issues](https://img.shields.io/github/issues/Reaishma/Cricket-century-prediction-)](https://github.com/Reaishma/Cricket-century-prediction-/issues)
 
-# 🚀 Access the project 
-
 [![View on streamlit](https://img.shields.io/badge/View-Streamlit-FF4B4B?style=for-the-badge&logo=streamlit)](https://d3vqfhjdzsfx2ertcgdju3.streamlit.app/)
 [![Web Interface](https://img.shields.io/badge/Web-Interface-4285F4?style=for-the-badge&logo=google-chrome)](https://reaishma.github.io/Cricket-century-prediction-/)
 
@@ -26,7 +24,10 @@
 
 </div>
 
+# 🚀 Access the project 
 
+**View on Streamlit App - https://d3vqfhjdzsfx2ertcgdju3.streamlit.app/**
+**Web interface on https://reaishma.github.io/Cricket-century-prediction-/**
 
 ## 🚀Overview
 
