@@ -2,15 +2,33 @@
 
 # Cricket Century Prediction 🏏📊
 
-
-![overview](https://github.com/Reaishma/Cricket-century-prediction-/blob/main/chrome_screenshot_Oct%2016%2C%202025%207_16_32%20AM%20GMT%2B05_30.png)
 <div align="center">
 
-# 🚀 Access the project 
-   
-  **View on streamlit - https://d3vqfhjdzsfx2ertcgdju3.streamlit.app/**
+# Cricket Century Prediction 🏏📊
 
-**Web Interface on https://reaishma.github.io/Cricket-century-prediction-/**
+![overview](https://github.com/Reaishma/Cricket-century-prediction-/blob/main/chrome_screenshot_Oct%2016%2C%202025%207_16_32%20AM%20GMT%2B05_30.png)
+
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.0+-orange.svg)](https://www.tensorflow.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-1.9+-red.svg)](https://pytorch.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.25+-FF4B4B.svg)](https://streamlit.io/)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-1.0+-F7931E.svg)](https://scikit-learn.org/)
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/Reaishma/Cricket-century-prediction-/blob/main/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/Reaishma/Cricket-century-prediction-?style=social)](https://github.com/Reaishma/Cricket-century-prediction-)
+[![GitHub forks](https://img.shields.io/github/forks/Reaishma/Cricket-century-prediction-?style=social)](https://github.com/Reaishma/Cricket-century-prediction-/fork)
+[![GitHub issues](https://img.shields.io/github/issues/Reaishma/Cricket-century-prediction-)](https://github.com/Reaishma/Cricket-century-prediction-/issues)
+
+# 🚀 Access the project 
+
+[![View on streamlit](https://img.shields.io/badge/Demo-Streamlit-FF4B4B?style=for-the-badge&logo=streamlit)](https://d3vqfhjdzsfx2ertcgdju3.streamlit.app/)
+[![Web Interface](https://img.shields.io/badge/Web-Interface-4285F4?style=for-the-badge&logo=google-chrome)](https://reaishma.github.io/Cricket-century-prediction-/)
+
+---
+
+</div>
+
+
 
 ## 🚀Overview
 
