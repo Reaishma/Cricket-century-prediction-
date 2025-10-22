@@ -1,7 +1,5 @@
 
 
-# Cricket Century Prediction 🏏📊
-
 <div align="center">
 
 # Cricket Century Prediction 🏏📊
@@ -21,7 +19,7 @@
 
 # 🚀 Access the project 
 
-[![View on streamlit](https://img.shields.io/badge/Demo-Streamlit-FF4B4B?style=for-the-badge&logo=streamlit)](https://d3vqfhjdzsfx2ertcgdju3.streamlit.app/)
+[![View on streamlit](https://img.shields.io/badge/View-Streamlit-FF4B4B?style=for-the-badge&logo=streamlit)](https://d3vqfhjdzsfx2ertcgdju3.streamlit.app/)
 [![Web Interface](https://img.shields.io/badge/Web-Interface-4285F4?style=for-the-badge&logo=google-chrome)](https://reaishma.github.io/Cricket-century-prediction-/)
 
 ---
